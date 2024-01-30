@@ -13,7 +13,6 @@ scrape_configs:
       - refresh_interval: "5m"
         files:
           - './targets/node_exporter.json'
-          #- '/etc/prometheus/targets/node_exporter.json'
 
     # static_configs:
     #   # http://sjcx-smx02:9100/metrics
