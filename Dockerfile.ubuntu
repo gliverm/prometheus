@@ -1,5 +1,6 @@
 # Created on Ubuntu to build a Docker image for the application
 # For the purposes of experimentation and learning
+# May be better to use curated images from Docker Hub
 # ------------------------------
 # BUILD: docker build --file Dockerfile.ubuntu -t my-ubuntu .
 # RUN: docker run -it -p 9090:9090 --rm my-ubuntu

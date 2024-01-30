@@ -1,5 +1,0 @@
-# Prototype to build a Prometheus server container
-# Build: docker build -t my-prometheus .
-# Run: docker run -p 9090:9090 my-prometheus
-FROM prom/prometheus
-ADD prometheus.yml /etc/prometheus/
