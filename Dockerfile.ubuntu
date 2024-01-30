@@ -1,0 +1,48 @@
+# Created on Ubuntu to build a Docker image for the application
+# For the purposes of experimentation and learning
+# ------------------------------
+# BUILD: docker build --file Dockerfile.ubuntu -t my-ubuntu .
+# RUN: docker run -it -p 9090:9090 --rm my-ubuntu
+# ------------------------------
+ARG UBUNTU_RELEASE=22.04
+FROM ubuntu:${UBUNTU_RELEASE}
+LABEL maintainer="Gayle Livermore <gayle.livermore@gmail.com>"
+ENV LANG="C.UTF-8"
+ENV LC_ALL="C.UTF-8"
+ENV LC_CTYPE="C.UTF-8"
+ENV TZ=America/Chicago
+ENV SHELL=/bin/bash
+RUN chsh -s /bin/bash
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# hadolint ignore=DL3008
+RUN echo "===> Adding build dependencies..."  && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install --no-install-recommends --yes \
+    git \
+    libfontconfig1 \
+    ca-certificates \
+    wget \
+    curl && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+# TODO - Consider making multi-stage split here
+ARG PROMETHEUS_VERSION=2.45.3
+RUN echo "===> Install prometheus ..."  && \
+  wget https://github.com/prometheus/prometheus/releases/download/v$PROMETHEUS_VERSION/prometheus-$PROMETHEUS_VERSION.linux-amd64.tar.gz && \
+    tar xvfz prometheus-*.tar.gz && \
+    rm prometheus-*.tar.gz && \
+    mkdir /etc/prometheus /var/lib/prometheus && \
+    cd prometheus* && \
+    mv prometheus promtool /usr/local/bin/ && \
+    mv prometheus.yml /etc/prometheus/ && \  
+    mv consoles/ console_libraries/ /etc/prometheus/ && \
+    cd .. && \
+    rm -rf prometheus*
+RUN echo "===> Version checkout ..."  && \
+    prometheus --version && \
+    promtool --version
+WORKDIR /etc/prometheus/
+COPY prometheus . 
+# Example of running prometheus with defaults: prometheus --config.file=/etc/prometheus/prometheus.yml
