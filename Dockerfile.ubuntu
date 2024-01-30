@@ -46,3 +46,5 @@ RUN echo "===> Version checkout ..."  && \
 WORKDIR /etc/prometheus/
 COPY prometheus . 
 # Example of running prometheus with defaults: prometheus --config.file=/etc/prometheus/prometheus.yml
+# TODO - --config.file not needed for this scenario - can remove the mv prometheus.yml /etc/prometheus/ above
+
