@@ -1,1 +1,46 @@
-# To bring up Grafana container, run:
+# Created on Ubuntu to build a Docker image for the application
+# For the purposes of experimentation and learning
+# May be better to use curated images from Docker Hub
+# All data is stored within container and therefore is ephemeral
+# ------------------------------
+# BUILD: docker build --file Dockerfile.grafana -t my-grafana .
+# RUN: docker run -it -p 3000:3000 --rm my-grafana
+# ------------------------------
+ARG UBUNTU_RELEASE=22.04
+FROM ubuntu:${UBUNTU_RELEASE}
+LABEL maintainer="Gayle Livermore <gayle.livermore@gmail.com>"
+ENV LANG="C.UTF-8"
+ENV LC_ALL="C.UTF-8"
+ENV LC_CTYPE="C.UTF-8"
+ENV TZ=America/Chicago
+ENV SHELL=/bin/bash
+RUN chsh -s /bin/bash
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# hadolint ignore=DL3008
+RUN echo "===> Adding build dependencies..."  && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install --no-install-recommends --yes \
+    git \
+    libfontconfig1 \
+    ca-certificates \
+    apt-transport-https \
+    software-properties-common \
+    wget \
+    curl && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+# TODO - Consider making multi-stage split here
+RUN echo "===> Install latest stable OSS grafana ..."  && \
+    mkdir -p /etc/apt/keyrings/ && \
+    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | tee /etc/apt/keyrings/grafana.gpg > /dev/null && \
+    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | tee -a /etc/apt/sources.list.d/grafana.list && \
+    apt-get update && \
+    apt-get install --yes grafana&& \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+CMD ["grafana-server", "--config=/etc/grafana/grafana.ini", "--homepath", "/usr/share/grafana"]
+# Example to run grafana with defaults: grafana-server --config=/etc/grafana/grafana.ini --homepath /usr/share/grafana
+# Default creds: admin/admin . . . if just learning don't bother changing

@@ -1,9 +1,10 @@
 # Created on Ubuntu to build a Docker image for the application
 # For the purposes of experimentation and learning
 # May be better to use curated images from Docker Hub
+# All data is stored within container and therefore is ephemeral
 # ------------------------------
-# BUILD: docker build --file Dockerfile.ubuntu -t my-ubuntu .
-# RUN: docker run -it -p 9090:9090 --rm my-ubuntu
+# BUILD: docker build --file Dockerfile.prometheus -t my-prometheus .
+# RUN: docker run -it -p 9090:9090 --rm my-prometheus
 # ------------------------------
 ARG UBUNTU_RELEASE=22.04
 FROM ubuntu:${UBUNTU_RELEASE}
@@ -46,6 +47,7 @@ RUN echo "===> Version checkout ..."  && \
     promtool --version
 WORKDIR /etc/prometheus/
 COPY prometheus . 
+CMD ["prometheus", "--config.file=/etc/prometheus/prometheus.yml", "--web.enable-remote-write-receiver"]
 # Example of running prometheus with defaults: prometheus --config.file=/etc/prometheus/prometheus.yml
 # TODO - --config.file not needed for this scenario - can remove the mv prometheus.yml /etc/prometheus/ above
 

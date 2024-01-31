@@ -1,1 +1,39 @@
-# To bring up prometheus and grafana as part of learning  
+# ---------- 
+# Development environment to learn and test prometheus and grafana
+# Uses Ubuntu based custom built images for prometheus and grafana
+# ----------
+services:
+  prometheus:
+    hostname: prometheus
+    image: my-prometheus
+    build:
+      context: .
+      dockerfile: Dockerfile.prometheus
+    container_name: my-prometheus
+    stdin_open: true  # docker run -i
+    tty: true         # docker run -t
+    ports:
+      - 9090:9090
+    # volumes:
+    #   - ./prometheus:/etc/prometheus
+    # command:
+    #   - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - monitoring
+
+  grafana:
+    hostname: grafana
+    image: my-grafana
+    build:
+      context: .
+      dockerfile: Dockerfile.grafana
+    container_name: my-grafana
+    ports:
+      - 3000:3000
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+
