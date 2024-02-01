@@ -47,7 +47,8 @@ RUN echo "===> Version checkout ..."  && \
     promtool --version
 WORKDIR /etc/prometheus/
 COPY prometheus . 
-CMD ["prometheus", "--config.file=/etc/prometheus/prometheus.yml", "--web.enable-remote-write-receiver"]
-# Example of running prometheus with defaults: prometheus --config.file=/etc/prometheus/prometheus.yml
-# TODO - --config.file not needed for this scenario - can remove the mv prometheus.yml /etc/prometheus/ above
-
+CMD ["prometheus", \
+    "--config.file=/etc/prometheus/prometheus.yml", \
+    "--storage.tsdb.retention.time=3d", \
+    "--web.enable-remote-write-receiver" \
+]
