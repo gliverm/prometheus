@@ -1,6 +1,6 @@
 # prometheus
 
-Prototype for learning.  Pluralsight has some great tutorials that jumpstarted mylearning.
+Prototype for learning.  Pluralsight has some great tutorials that jumpstarted my learning.
 
 Goal: Figure out how to monitor interesting host and app telemetry metrics.
 
@@ -53,8 +53,7 @@ Servers exist in author's environment with node-exporter already installed.  Inf
 
    [Install]
    WantedBy=multi-user.target
-   EOF```
-
+   EOF
    ```
 4. Reload system daemon and start the node_exporter service.
    `sudo systemctl daemon-reload sudo systemctl start node_exporter sudo systemctl enable node_exporter`
@@ -65,7 +64,7 @@ Servers exist in author's environment with node-exporter already installed.  Inf
 
 ## Community Linux Server Dashboard
 
-Suggest downloading a community version of a dashboard to learn from.  Community dashboards may be found on the Grafana site under dashboads.  An interesting dashboard to experiment with may be the one labeled 'node exporter full'.  Because this setup is mean to be for experimenting and discover it may also be worth the time to mess with how to export and re-import configuration data to be able to recreate.
+Suggest downloading a community version of a dashboard to learn from.  Community dashboards may be found on the Grafana site under dashboards.  An interesting dashboard to experiment with may be the one labeled 'node exporter full'.  Because this setup is intended to be for experimenting, it may also be worth the time to mess with how to export and re-import configuration data to be able to recreate.
 
 ## Learning Selectors
 
