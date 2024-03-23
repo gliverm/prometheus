@@ -1,7 +1,7 @@
 # Getting Started prometheus configuration
 # Check config: promtool check config prometheus.yml
 global:
-  scrape_interval: 15s
+  scrape_interval: 60s   # Default is every 1 minute.
 
 scrape_configs:
   - job_name: 'prometheus'
@@ -9,16 +9,9 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'linux_node_exporter'
-    scrape_interval: 10s
+    scrape_interval: 10s  # Scraping frequency can affect CPU
     file_sd_configs:
       - refresh_interval: "5m"
         files:
           - './targets/node_exporter.json'
 
-    # static_configs:
-    #   # http://sjcx-smx02:9100/metrics
-    #   # http://10.243.241.222:9100/metrics
-    #   - targets: ['10.243.241.222:9100']
-    #     labels:
-    #       os: 'linux'
-    #       runtime: vm
