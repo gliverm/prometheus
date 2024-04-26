@@ -40,7 +40,8 @@ Servers exist in author's environment with node-exporter already installed.  Inf
    `sudo useradd -rs /bin/false node_exporter`
 3. Create service file.
 
-   ```sudo
+   ```
+   sudo tee /etc/systemd/system/node_exporter.service<<EOF
    [Unit]
    Description=Node Exporter
    After=network.target
